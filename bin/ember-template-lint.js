@@ -400,7 +400,7 @@ async function run() {
     }
 
     if (options.updateTodo) {
-      let [added, removed] = await linter.updateTodo(
+      let [added, removed] = linter.updateTodo(
         linterOptions,
         fileResults,
         todoInfo.todoConfig,
@@ -412,7 +412,7 @@ async function run() {
     }
 
     if (!filePaths.has(STDIN)) {
-      fileResults = await linter.processTodos(
+      fileResults = linter.processTodos(
         linterOptions,
         fileResults,
         options.fix || options.cleanTodo,
