@@ -33,7 +33,7 @@ describe('todo usage', () => {
 
   afterEach(async function () {
     process.chdir(ROOT);
-    // await project.dispose();
+    await project.dispose();
   });
 
   describe('with/without --update-todo and --include-todo params', function () {
@@ -192,7 +192,7 @@ describe('todo usage', () => {
           },
         },
       });
-      debugger;
+
       let result = await run(['.', '--update-todo']);
 
       expect(result.exitCode).toEqual(0);
@@ -355,7 +355,7 @@ describe('todo usage', () => {
 
       // run normally and expect an error for not running --fix
       let result = await run(['.']);
-      debugger;
+
       expect(result.exitCode).toEqual(1);
       expect(result.stdout).toMatchInlineSnapshot(`
         "app/templates/require-button-type.hbs
