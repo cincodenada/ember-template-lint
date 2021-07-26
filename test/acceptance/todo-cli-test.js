@@ -3,9 +3,9 @@ const fs = require('fs');
 const {
   ensureTodoStorageDir,
   todoStorageDirExists,
-  readTodos,
   getTodoStorageDirPath,
   writeTodos,
+  readTodoData,
 } = require('@ember-template-lint/todo-utils');
 const { differenceInDays, subDays } = require('date-fns');
 
@@ -14,12 +14,6 @@ const run = require('../helpers/run');
 const setupEnvVar = require('../helpers/setup-env-var');
 
 const ROOT = process.cwd();
-
-function readUnprocessedTodos(baseDir) {
-  return [...readTodos(baseDir).values()].reduce((matcherResults, matcher) => {
-    return [...matcherResults, ...matcher.unprocessed];
-  }, []);
-}
 
 describe('todo usage', () => {
   setupEnvVar('FORCE_COLOR', '0');
@@ -172,7 +166,7 @@ describe('todo usage', () => {
 
       await run(['.', '--update-todo']);
 
-      const result = readUnprocessedTodos(project.baseDir);
+      const result = readTodoData(project.baseDir);
 
       expect(result).toHaveLength(0);
     });
@@ -262,7 +256,7 @@ describe('todo usage', () => {
 
       await run(['.', '--update-todo']);
 
-      let todos = readUnprocessedTodos(project.baseDir);
+      let todos = readTodoData(project.baseDir);
 
       expect(todos).toHaveLength(2);
 
@@ -284,7 +278,7 @@ describe('todo usage', () => {
         '--no-config-path',
       ]);
 
-      todos = readUnprocessedTodos(project.baseDir);
+      todos = readTodoData(project.baseDir);
 
       expect(todos).toHaveLength(3);
     });
@@ -307,7 +301,7 @@ describe('todo usage', () => {
 
       await run(['.', '--update-todo']);
 
-      let todos = readUnprocessedTodos(project.baseDir);
+      let todos = readTodoData(project.baseDir);
 
       expect(todos).toHaveLength(3);
 
@@ -320,7 +314,7 @@ describe('todo usage', () => {
         '--no-config-path',
       ]);
 
-      todos = readUnprocessedTodos(project.baseDir);
+      todos = readTodoData(project.baseDir);
 
       expect(result.exitCode).toEqual(0);
       expect(todos).toHaveLength(3);
@@ -861,7 +855,7 @@ describe('todo usage', () => {
 
           let result = await run(['.', '--update-todo']);
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -895,7 +889,7 @@ describe('todo usage', () => {
             },
           });
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -929,7 +923,7 @@ describe('todo usage', () => {
             },
           });
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -959,7 +953,7 @@ describe('todo usage', () => {
 
           let result = await run(['.', '--update-todo']);
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -993,7 +987,7 @@ describe('todo usage', () => {
             },
           });
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -1027,7 +1021,7 @@ describe('todo usage', () => {
             },
           });
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -1058,7 +1052,7 @@ describe('todo usage', () => {
 
           let result = await run(['.', '--update-todo']);
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -1097,7 +1091,7 @@ describe('todo usage', () => {
             },
           });
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -1139,7 +1133,7 @@ describe('todo usage', () => {
             }
           );
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -1179,7 +1173,7 @@ describe('todo usage', () => {
             '20',
           ]);
 
-          const todos = readUnprocessedTodos(project.baseDir);
+          const todos = readTodoData(project.baseDir);
 
           expect(result.exitCode).toEqual(0);
 
@@ -1456,7 +1450,7 @@ describe('todo usage', () => {
 
             let result = await run(['.', '--update-todo']);
 
-            const todos = readUnprocessedTodos(project.baseDir);
+            const todos = readTodoData(project.baseDir);
 
             expect(result.exitCode).toEqual(0);
 
